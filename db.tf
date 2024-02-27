@@ -8,6 +8,13 @@ resource "aws_security_group" "mysql_sg" {
     cidr_blocks = [aws_security_group.wordpress_sg.id]
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [aws_security_group.wordpress_sg.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
