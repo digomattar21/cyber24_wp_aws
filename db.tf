@@ -28,7 +28,7 @@ resource "aws_instance" "mysql" {
               sudo apt install -y mysql-server
               #Secure MySQL installation (this is a placeholder, you'll need to customize this part)
               sudo mysql_secure_installation
-              Create your database and user
+              #Create your database and user
               sudo mysql -e "CREATE DATABASE wordpress;"
               sudo mysql -e "CREATE USER '${db_user}'@'%' IDENTIFIED BY '${db_password}';"
               sudo mysql -e "GRANT ALL PRIVILEGES ON wordpress.* TO '${db_user}'@'%';"
