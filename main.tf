@@ -1,6 +1,6 @@
 provider "aws" {
-  profile = "cyber24" #Atento aqui, configurar profile com nome cyber24 ou trocar pra default (aws configure --profile default)
-  region  = "us-west-2" 
+  profile = "cyber24"
+  region  = "us-east-1" 
 }
 
 resource "aws_vpc" "my_vpc" {
@@ -20,12 +20,3 @@ resource "aws_subnet" "private_subnet" {
   cidr_block = "10.0.2.0/24"
 }
 
-resource "aws_instance" "wordpress" {
-  ami           = "ami-0c55b159cbfafe1f0" # Change to a valid AMI (ubuntu 22 for example)
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public_subnet.id
-
-  tags = {
-    Name = "WordPress"
-  }
-}
