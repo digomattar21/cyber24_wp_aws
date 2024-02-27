@@ -16,11 +16,16 @@ resource "aws_security_group" "mysql_sg" {
   }
 }
 
+resource "aws_key_pair" "db" {
+  key_name   = "db"
+  public_key = file("~/Desktop/cyberElet/db.pub")
+}
 resource "aws_instance" "mysql" {
   ami           = "ami-0cf1810907a781f00" #Ubuntu 22.04 us-east-1
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.private_subnet.id
   security_groups = [aws_security_group.mysql_sg.name]
+  key_name = aws_key_pair.db.key_name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -34,8 +39,6 @@ resource "aws_instance" "mysql" {
               sudo mysql -e "GRANT ALL PRIVILEGES ON wordpress.* TO '${db_user}'@'%';"
               sudo mysql -e "FLUSH PRIVILEGES;"
               EOF
-
-
   tags = {
     Name = "MySQL"
   }

@@ -23,12 +23,18 @@ resource "aws_security_group" "wordpress_sg" {
   }
 }
 
+resource "aws_key_pair" "wordpress" {
+  key_name   = "wordpress"
+  public_key = file("~/Desktop/cyberElet/wordpress.pub")
+}
+
 resource "aws_instance" "wordpress" {
   ami           = "ami-0cf1810907a781f00" # Ubuntu 22.04 us-east-1
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnet.id
   security_groups = [aws_security_group.wordpress_sg.name]
-
+  key_name = aws_key_pair.wordpress.key_name
+  
   user_data = <<-EOF
             #!/bin/bash
             sudo apt update
@@ -52,7 +58,7 @@ resource "aws_instance" "wordpress" {
               sudo add-apt-repository ppa:certbot/certbot
               sudo apt update
               sudo apt install -y certbot python3-certbot-apache
-              sudo certbot --apache -m admin@abcplace.com --domains abcplace.com,www.abcplace.com --non-interactive --agree-tos
+              sudo certbot --apache --domains abcplace.com,www.abcplace.com --non-interactive --agree-tos
 
               cd /var/www/html
               sudo wget https://wordpress.org/latest.tar.gz
