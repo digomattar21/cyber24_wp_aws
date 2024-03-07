@@ -12,21 +12,29 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public_subnet.id
+  subnet_id      = aws_subnet.public_subnet_1.id
   route_table_id = aws_route_table.public.id
 } 
 
+resource "aws_route_table_association" "public_2" {
+  subnet_id      = aws_subnet.public_subnet_2.id
+  route_table_id = aws_route_table.public.id
+}
 
-# resource "aws_route_table" "private_route_table" {
-#   vpc_id = aws_vpc.rodry-vpc-tf.id
+resource "aws_route_table" "private_route_table" {
+  vpc_id = aws_vpc.my_vpc.id
 
-#   route {
-#     cidr_block     = "0.0.0.0/0"
-#     nat_gateway_id = aws_nat_gateway.nat_gateway.id
-#   }
-# }
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gateway.id
+  }
 
-# resource "aws_route_table_association" "private_route_table_assoc" {
-#   subnet_id      = aws_subnet.private[0].id  
-#   route_table_id = aws_route_table.private_route_table.id
-# }
+  tags = {
+    Name = "Private RT Nat"
+  }
+}
+
+resource "aws_route_table_association" "private_route_table_assoc" {
+  subnet_id      = aws_subnet.private_subnet.id
+  route_table_id = aws_route_table.private_route_table.id
+}
