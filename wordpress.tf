@@ -19,7 +19,7 @@ resource "aws_security_group" "wordpress_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.bastion_sg.id]
   }
 
   egress {
@@ -46,35 +46,7 @@ resource "aws_instance" "wordpress" {
             #!/bin/bash
             sudo apt update
             sudo apt install -y apache2 php php-curl php-gd php-mbstring php-xml phpxmlrpc php-soap php-intl php-zip php-mysql
-            #echo "<VirtualHost *:80>
-             #   ServerAdmin webmaster@abcplace.com
-             #   ServerName abcplace.com
-             #   ServerAlias www.abcplace.com
-             #   DocumentRoot /var/www/html
-             #   ErrorLog  /etc/error.log
-             #   CustomLog /etc/access.log combined
-             #   </VirtualHost>" | sudo tee /etc/apache2/sites-available/abcplace.conf
-                
-              #sudo a2ensite abcplace.conf
-              #sudo a2dissite 000-default.conf
-              #sudo systemctl restart apache2
-              
-              # Install Certbot and request an SSL certificate for ABC Place
-              #sudo apt install -y software-properties-common
-              #sudo add-apt-repository universe
-              #sudo add-apt-repository ppa:certbot/certbot
-              #sudo apt update
-              #sudo apt install -y certbot python3-certbot-apache
-              #sudo certbot --apache --domains abcplace.com,www.abcplace.com --non-interactive --agree-tos
-
-              #cd /var/www/html
-              #sudo wget https://wordpress.org/latest.tar.gz
-              #sudo tar -xzf latest.tar.gz
-              #sudo cp -r wordpress/* /var/www/html/
-              #sudo rm -rf wordpress latest.tar.gz
-              #sudo chown -R www-data:www-data /var/www/html
-              #sudo systemctl restart apache2
-              EOF
+            EOF
 
   tags = {
     Name = "WordPress"
